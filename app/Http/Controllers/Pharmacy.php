@@ -10,7 +10,7 @@ class Pharmacy extends Controller
     //
     public function Register(Request $request)
     {
-        $filepath = 'C:\Users\G.force\Desktop\pharmacy.json';
+        $filepath = 'C:\xampp\htdocs\my_website\Project_University\pharmacy.json';
         $flecontent = file_get_contents($filepath);
         $jsoncontent = json_decode($flecontent, true);
         $username = $request->input('username');
@@ -37,18 +37,7 @@ class Pharmacy extends Controller
             'password' => $password,
             'medicine' => [
                 'scientific_name' => null,
-                'commercial_name' => null,
-                'category' => null,
-                'Manufactor' => null,
                 'quantity' => null,
-                'exp_date' => [
-
-                    'year' => null,
-                    'month' => null,
-                    'day' => null
-
-                ],
-                'price' => null,
             ],
         ];
         $exist = false;
@@ -78,7 +67,7 @@ class Pharmacy extends Controller
     //traverse throught medicine in depot refering to its category
     public function traverse()
     {
-        $filepath = 'C:\Users\G.force\Desktop\Medicines.json'; // path of pharmacy file .json
+        $filepath = 'C:\xampp\htdocs\my_website\Project_University\Medicines.json'; // path of pharmacy file .json
         $filecontent = file_get_contents($filepath);
         $jsoncontent = json_decode($filecontent, true);
         // sort by category
@@ -93,16 +82,16 @@ class Pharmacy extends Controller
     public function order(Request $request)
     {
         $pharmacy = $request->input('pharmacy');
-        $sc_name[] = $request->input('sc_name');
-        $qty[] = $request->input('qty');
+        $sc_name = $request->input('sc_name');
+        $qty = $request->input('qty');
 
-        // Medicine in depot path
-        $Medicinepath = 'C:\Users\G.force\Desktop\Medicines.json';
+        // Medicine in warehouse path
+        $Medicinepath = 'C:\xampp\htdocs\my_website\Project_University\Medicines.json';
         $Medicinecontent = file_get_contents($Medicinepath);
         $jsonMedicine = json_decode($Medicinecontent, true);
 
         // orders path
-        $orderpath = 'C:\Users\G.force\Desktop\Orders.json';
+        $orderpath = 'C:\xampp\htdocs\my_website\Project_University\Orders.json';
         $ordercontent = file_get_contents($orderpath);
         $jsonorder = json_decode($ordercontent, true);
         // adding order
@@ -118,14 +107,13 @@ class Pharmacy extends Controller
                     if ($item['sc_name'] == $sc_name[$i]) {
                         $exist = true;
                         if ($item['qty'] < $qty[$i]) {
-                            return response()->json([
-                                'message' => 'Quantity you are asking for is more than existed'
-                            ]);
+
+
+
                         }
                     } else {
-                        return response()->json([
-                            'message' => sprintf('%s This medicine is not existed', $sc_name[$i])
-                        ]);
+
+
                     }
                 }
             }
@@ -164,10 +152,10 @@ class Pharmacy extends Controller
         }
     }
     //show orders for pharmacist
-    public function show_orders(){
-        $pharmacist = request();
+    public function show_orders(Request $request){
+        $pharmacist = $request->input('pharmacy');
     // orders path
-        $orderpath = 'C:\Users\G.force\Desktop\Orders.json' ;
+        $orderpath = 'C:\xampp\htdocs\my_website\Project_University\Orders.json' ;
         $ordercontent = file_get_contents($orderpath);
         $jsonorder = json_decode($ordercontent , true);
     // orders show
@@ -178,7 +166,7 @@ class Pharmacy extends Controller
             ]);
         }
         foreach($jsonorder as $item)
-            if($item['pharmacist' ] == $pharmacist){
+            if($item['pharmacy' ] == $pharmacist){
                 $exist = true ;
                 return response()->json([ $item ]);
         }
@@ -186,13 +174,12 @@ class Pharmacy extends Controller
             return response()->json([
                 'message' => 'No orders found'
             ]);
-
     }
     // Medicine details
-    public function details(){
-        $name = request();
+    public function details(Request $request){
+        $name = $request->input('sc_name');
 
-        $filepath = 'C:\Users\G.force\Desktop\Medicines.json';
+        $filepath = 'C:\xampp\htdocs\my_website\Project_University\Medicines.json';
         $filecontent = file_get_contents($filepath);
         $jsoncontent = json_decode($filecontent , true);
         $exist = false ;
@@ -207,7 +194,7 @@ class Pharmacy extends Controller
                 }
             }
             if($exist == false){
-                return response([
+                return response()->json([
                     'message' => 'Medicine is not existed'
                 ]);
             }
@@ -218,7 +205,7 @@ class Pharmacy extends Controller
         $name = $request->input('sc_name');
         $category = $request->input('category');
 
-        $filepath = 'C:\Users\G.force\Desktop\Medicines.json';
+        $filepath = 'C:\xampp\htdocs\my_website\Project_University\Medicines.json';
         $filecontent = file_get_contents($filepath);
         $jsoncontent = json_decode($filecontent , true);
         $exist = false ;

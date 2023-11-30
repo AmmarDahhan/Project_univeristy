@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "username": "noor",
+        "phone": 12345,
+        "password": "$2y$12$kz6wioGe1Y40XoAGzgHOp.DD63oRFIY6EP3ifprer8a2iF0CIRZ7m",
+        "medicine": {
+            "scientific_name": null,
+            "quantity": null
+        }
+    },
+    {
+        "id": 2,
+        "username": "noor1",
+        "phone": 123456,
+        "password": "$2y$12$LYzURyg6Ee6QycWBCAiv3O01Ve3tsKxzReXN2dKHdQ9ASd7Fl2kg6",
+        "medicine": {
+            "scientific_name": null,
+            "quantity": null
+        }
+    },
+    {
+        "id": 3,
+        "username": "noor2",
+        "phone": 1234567,
+        "password": "$2y$12$ngibszKHa3gHZBX6KxnlBuyoUadkTNpmVPaveJ.dOM.Vvso9qzyh.",
+        "medicine": {
+            "scientific_name": null,
+            "quantity": null
+        }
+    }
+]

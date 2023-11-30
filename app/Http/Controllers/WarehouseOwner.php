@@ -11,11 +11,23 @@ class WarehouseOwner extends Controller
     public function Login(Request $request)
     {
 
-        $filepath = 'C:\xampp\htdocs\programming\ownerinfo.json';
+        $filepath = 'C:\xampp\htdocs\my_website\Project_University\ownerinfo.json';
         $filecontent = file_get_contents($filepath);
         $jsoncontent = json_decode($filecontent, true);
         $username = $request->input('username');
-        $phone = $request->input('phone number');
+        $phone_number = $request->input('phone_number');
+        if(!$jsoncontent || !is_array($jsoncontent)){
+            $info = [
+                'username' => $username,
+                'phone_number' => $phone_number,
+            ];
+            $content = [$info];
+            file_put_contents($filepath , json_encode($content));
+            return response()->json([
+                'message' => 'successful login',
+            ]);
+        }
+        else
         return response()->json([
             'message' => 'successful login',
             'homepage' => $jsoncontent
@@ -40,7 +52,7 @@ class WarehouseOwner extends Controller
                 'message' => 'All fields are required'
             ]);
         } else {
-            $filepath = 'C:\Users\G.force\Desktop\Medicines.json';
+            $filepath = 'C:\xampp\htdocs\my_website\Project_University\Medicines.json';
             $filecontent = file_get_contents($filepath);
             $jsoncontent = json_decode($filecontent, true);
             $medicine = [
@@ -84,11 +96,11 @@ class WarehouseOwner extends Controller
     }
 
     //search function(by name and by category)
-    public function search()
+    public function search(Request $request)
     {
-        $name = request();
-        $category = request();
-        $filepath = 'C:\Users\G.force\Desktop\Medicines.json';
+        $name = $request->input('sc_name');
+        $category = $request->input('category');
+        $filepath = 'C:\xampp\htdocs\my_website\Project_University\Medicines.json';
         $filecontent = file_get_contents($filepath);
         $jsoncontent = json_decode($filecontent, true);
         $exist = false;
@@ -130,11 +142,11 @@ class WarehouseOwner extends Controller
     }
 
     //Medicine details
-    public function details()
+    public function details(Request $request)
     {
-        $name = request();
+        $name = $request->input('sc_name');
 
-        $filepath = 'C:\Users\G.force\Desktop\Medicines.json';
+        $filepath = 'C:\xampp\htdocs\my_website\Project_University\Medicines.json';
         $filecontent = file_get_contents($filepath);
         $jsoncontent = json_decode($filecontent, true);
         $exist = false;
@@ -158,7 +170,7 @@ class WarehouseOwner extends Controller
     //orders management as show
     public function orderes_show(Request $request)
     {
-        $filepath = 'C:\Users\G.force\Desktop\Orders.json';
+        $filepath = 'C:\xampp\htdocs\my_website\Project_University\Orders.json';
         $filecontent = file_get_contents($filepath);
         $jsoncontent = json_decode($filecontent, true);
         foreach ($jsoncontent as $item)
@@ -168,26 +180,52 @@ class WarehouseOwner extends Controller
     //orders management as modify
     public function ordermodify(Request $request)
     {
-        $idx = request();
+        $idx = $request->input('idx');
         $statue = $request->input('statue'); // bending or sent or recieved
         $paid = $request->input('paid'); // boolean variable
         // order modify
-        $orderpath = 'C:\Users\G.force\Desktop\Orders.json';
+        $orderpath = 'C:\xampp\htdocs\my_website\Project_University\Orders.json';
         $orercontent = file_get_contents($orderpath);
         $jsonorder = json_decode($orercontent, true);
-        $jsonorder[$idx]['statue']->$statue;
-        $jsonorder[$idx]['paid']->$paid;
+        $jsonorder[$idx]['statue'] = $statue;
+        $jsonorder[$idx]['paid'] = $paid;
 
         //Medicine modiify
-        $medicinepath = 'C:\Users\G.force\Desktop\Medicines.json';
+        $medicinepath = 'C:\xampp\htdocs\my_website\Project_University\Medicines.json';
         $medicinecontent = file_get_contents($medicinepath);
         $jsonmedicine = json_decode($medicinecontent, true);
+        //pharmacy modify
+        $pharmacypath = 'C:\xampp\htdocs\my_website\Project_University\pharmacy.json';
+        $pharmacycontent = file_get_contents($pharmacypath);
+        $jsonpharmacy = json_decode($pharmacycontent , true);
+        // modifying is here
+        $found = false ;
         if ($statue = 'sent') {
-            foreach ($jsonorder as $item) {
-                // editing quantity of medicines in depot(Medicines.json) and (pharmacy.json)
+            for($i = 0 ; $i < count($jsonorder[$idx]['med']) ; $i++){
+                foreach($jsonmedicine as $medicine)
+                    if($medicine['sc_name'] == $jsonorder[$idx]['med']['sc_name[$i]']){
+                        $medicine['qty'] -= $jsonorder[$idx]['med']['qty[$i]'] ;
+                        file_put_contents($medicinepath , json_encode($medicine));
+                    }
+                    foreach($jsonpharmacy as $med){
+                        if($med['medicine']->scientific_name == $jsonorder[$idx]['med']['sc_name[$i]']){
+                            $found = true ;
+                            $med['medicine']->quantity += $jsonorder[$idx]['med']['qty[$i]'];
+                            file_put_contents($pharmacypath , json_encode($med));
+                        }
 
+                    }
+                    if($found == false){
+                        $new = [
+                            'scientific_name' => $jsonorder[$idx]['med']['sc_name[$i]'],
+                            'quantity' => $jsonorder[$idx]['med']['qty[$i]'],
+                        ];
+                        file_put_contents($pharmacypath , json_encode($new));
+                        $found = false ;
+                    }
+                }
 
             }
-        }
+
     }
 }

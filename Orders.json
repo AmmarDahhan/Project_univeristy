@@ -1,0 +1,18 @@
+[
+    {
+        "pharmacy": 123,
+        "statue": "bending",
+        "paid": false,
+        "med": {
+            "sc_name": [
+                "setamol",
+                "tempra"
+            ],
+            "qty": [
+                25,
+                10
+            ]
+        },
+        "total_price": 45000
+    }
+]

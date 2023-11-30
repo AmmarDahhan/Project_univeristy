@@ -17,11 +17,11 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
     public function Login(Request $request){
-        $filepath = 'C:\Users\G.force\Desktop\pharmacy.json';
+        $filepath = 'C:\xampp\htdocs\my_website\Project_University\pharmacy.json';
         $flecontent = file_get_contents($filepath);
         $jsoncontent = json_decode($flecontent , true);
-        $username = $request->input('username');
         $phone = $request->input('phone');
+        $password = $request->input('password');
         foreach ($jsoncontent as $item)
                 if($phone == $item['phone'] ){
             return response()->json([
