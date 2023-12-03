@@ -5,14 +5,12 @@
         "paid": false,
         "med": {
             "sc_name": [
-                "setamol",
-                "tempra"
+                "setamol"
             ],
             "qty": [
-                25,
-                10
+                25
             ]
         },
-        "total_price": 45000
+        "total_price": 0
     }
 ]

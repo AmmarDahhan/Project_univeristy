@@ -1,18 +1,5 @@
 [
     {
-        "sc_name": "setamol",
-        "co_name": "tamcio",
-        "category": "bandage",
-        "manufactor": "alpha",
-        "qty": 50,
-        "exp": {
-            "year": 2023,
-            "month": 8,
-            "day": 6
-        },
-        "price": 1000
-    },
-    {
         "sc_name": "tempra",
         "co_name": "tamcio",
         "category": "bandage",

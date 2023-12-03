@@ -23,7 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 // Route Pharmacy
 Route::post('/Register' , [Pharmacy::class , 'Register'])->middleware('Register');
-Route::get('/login', [LoginController::class, 'Login']);
+Route::get('/login', [LoginController::class, 'Login'])->middleware(['checktoken']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::post('/Add_order' , [Pharmacy::class , 'order']); // Query string and Request Body are required
 Route::get('/show_orders' , [Pharmacy::class , 'show_orders']); // Query string is required
